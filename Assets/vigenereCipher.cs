@@ -29,6 +29,8 @@ public class vigenereCipher : MonoBehaviour {
             KMSelectable pressedObject = button;
             button.OnInteract += delegate () { keypadPress(pressedObject); return false; };
         }
+
+        GetComponent<KMBombModule>().OnActivate += Activate;
     }
 
     void Start()
@@ -55,7 +57,7 @@ public class vigenereCipher : MonoBehaviour {
         {
             int index = UnityEngine.Random.Range(0, alphabet.Length);
             textDisplay += alphabet[index];
-            answer += alphabet[(index + alphabet.IndexOf(Bomb.GetSerialNumber()[i])) % 35];
+            answer += alphabet[(index + alphabet.IndexOf(Bomb.GetSerialNumber()[i])) % 36];
         }
         Debug.LogFormat("[Vigenère Cipher #{0}] Answer is {1}", moduleId, answer);
         LED.GetComponentInChildren<TextMesh>().text = textDisplay;
@@ -65,10 +67,12 @@ public class vigenereCipher : MonoBehaviour {
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, obj.transform);
         obj.AddInteractionPunch();
+        Debug.LogFormat("{0} || {1}", moduleSolved, !lightsOn);
         if (moduleSolved || !lightsOn) {
             return;
         }
         string objtext = obj.GetComponentInChildren<TextMesh>().text;
+        Debug.LogFormat("Pressed {0}", objtext);
         if (objtext != "Submit")
         {
             input += objtext;

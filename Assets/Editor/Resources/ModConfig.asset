@@ -11,10 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: VigenereCipher
-  title: "Vigen\xE9re Cipher"
+  id: vigenereCipher
+  title: "Vigen\xE8re Cipher"
   author: DevExit
-  description: "A simple mod that uses the Vigen\xE9re Cipher!"
-  version: 1.0
+  description: "Vigen\xE8re Cipher 1.2\nJulius Caesar's little brother...by about
+    1600 years...\n\nModule ID: vigenereCipher\n\nCreated by: DevExit\n\nManual available
+    here:\n[url=https://depianoman.github.io/vigenereCipher/Manual/Vigenere%20Cipher.html]HTML[/url]\n[url=https://depianoman.github.io/vigenereCipher/Manual/pdfs/Modules/Vigen\xE8re%20Cipher.pdf]PDF[/url]"
+  version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: f622b6236abcb1a429181abe2eaa1042, type: 3}

@@ -57,7 +57,7 @@ public class vigenereCipher : MonoBehaviour {
             textDisplay += alphabet[index];
             answer += alphabet[(index + alphabet.IndexOf(Bomb.GetSerialNumber()[i])) % 35];
         }
-        Debug.LogFormat("[Vigenére Cipher #{0}] Answer is {1}", moduleId, answer);
+        Debug.LogFormat("[Vigenère Cipher #{0}] Answer is {1}", moduleId, answer);
         LED.GetComponentInChildren<TextMesh>().text = textDisplay;
     }
 
@@ -72,7 +72,7 @@ public class vigenereCipher : MonoBehaviour {
         if (objtext != "Submit")
         {
             input += objtext;
-            Debug.LogFormat("[Vigenére Cipher #{0}] Pressed button {1}. Input is {2}.", moduleId, obj.GetComponentInChildren<TextMesh>().text, input);
+            Debug.LogFormat("[Vigenère Cipher #{0}] Pressed button {1}. Input is {2}.", moduleId, obj.GetComponentInChildren<TextMesh>().text, input);
         }
         else {
             CheckAns();
@@ -82,7 +82,7 @@ public class vigenereCipher : MonoBehaviour {
 
     void CheckAns()
     {
-        Debug.LogFormat("[Vigenére Cipher #{0}] Submitted {1}, Expected {2}.", moduleId, input, answer);
+        Debug.LogFormat("[Vigenère Cipher #{0}] Submitted {1}, Expected {2}.", moduleId, input, answer);
         if (!input.Equals(answer))
         {
             incorrect = true;

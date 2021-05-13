@@ -306,10 +306,6 @@ td, th {
     padding-top: 2em;
 }
 
-.repeaters-spacer {
-	border:none;
-}
-
 @media print {
     .page-first {
         page-break-before: auto;

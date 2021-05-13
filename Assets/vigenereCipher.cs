@@ -20,6 +20,9 @@ public class vigenereCipher : MonoBehaviour {
 
     private string alphabet = "B45PREL0A6GFDHO8CWMQYSJ2ZTU9I1N3K7VX", textDisplay = "", answer = "", input = "";
 
+    Coroutine flashCoroutine;
+    TextMesh ledText;
+
     void Awake()
     {
         moduleId = moduleIdCounter++;
@@ -31,6 +34,7 @@ public class vigenereCipher : MonoBehaviour {
         }
 
         GetComponent<KMBombModule>().OnActivate += Activate;
+        ledText = LED.GetComponentInChildren<TextMesh>();
     }
 
     void Start()
@@ -60,7 +64,7 @@ public class vigenereCipher : MonoBehaviour {
             answer += alphabet[(index + alphabet.IndexOf(Bomb.GetSerialNumber()[i])) % 36];
         }
         Debug.LogFormat("[Vigenère Cipher #{0}] Answer is {1}", moduleId, answer);
-        LED.GetComponentInChildren<TextMesh>().text = textDisplay;
+        ledText.text = textDisplay;
     }
 
     void keypadPress(KMSelectable obj)
@@ -75,25 +79,53 @@ public class vigenereCipher : MonoBehaviour {
         Debug.LogFormat("Pressed {0}", objtext);
         if (objtext != "Submit")
         {
-            input += objtext;
-            Debug.LogFormat("[Vigenère Cipher #{0}] Pressed button {1}. Input is {2}.", moduleId, obj.GetComponentInChildren<TextMesh>().text, input);
+            if (input.Length < 6)
+            {
+                input += objtext;
+                Debug.LogFormat("[Vigenère Cipher #{0}] Pressed button {1}. Input is {2}.", moduleId, obj.GetComponentInChildren<TextMesh>().text, input);
+                ledText.text = input;
+            }
         }
         else {
             CheckAns();
-            input = "";
         }
     }
 
-    void CheckAns()
+    bool CheckAns()
     {
         Debug.LogFormat("[Vigenère Cipher #{0}] Submitted {1}, Expected {2}.", moduleId, input, answer);
         if (!input.Equals(answer))
         {
             incorrect = true;
+            flashCoroutine = StartCoroutine(Flash(input, textDisplay, new Color(1.0f, 0.0f, 0.0f), new Color(0.0f, 1.0f, 0.0f)));
+            input = "";
+            return false;
         }
         else {
             moduleSolved = true;
+            flashCoroutine = StartCoroutine(Flash(input, input, new Color(0.0f, 1.0f, 0.0f), new Color(0.0f, 1.0f, 0.0f)));
             GetComponent<KMBombModule>().HandlePass();
+            return true;
         }
+    }
+
+    IEnumerator Flash(string curr, string final, Color colorStart, Color colorFinish) {
+        FlashHelper(curr, colorStart);
+        yield return new WaitForSeconds(.5f);
+        FlashHelper("", new Color(0.0f, 0.0f, 0.0f));
+        yield return new WaitForSeconds(.5f);
+        FlashHelper(curr, colorStart);
+        yield return new WaitForSeconds(.5f);
+        FlashHelper("", new Color(0.0f, 0.0f, 0.0f));
+        yield return new WaitForSeconds(.5f);
+        FlashHelper(curr, colorStart);
+        yield return new WaitForSeconds(.75f);
+        FlashHelper(final, colorFinish);
+        StopCoroutine(flashCoroutine);
+    }
+
+    void FlashHelper(string text, Color color) {
+        ledText.color = color;
+        ledText.text = text;
     }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using KModkit;
 
@@ -71,12 +69,10 @@ public class vigenereCipher : MonoBehaviour {
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, obj.transform);
         obj.AddInteractionPunch();
-        Debug.LogFormat("{0} || {1}", moduleSolved, !lightsOn);
         if (moduleSolved || !lightsOn) {
             return;
         }
         string objtext = obj.GetComponentInChildren<TextMesh>().text;
-        Debug.LogFormat("Pressed {0}", objtext);
         if (objtext != "Submit")
         {
             if (input.Length < 6)
@@ -127,5 +123,36 @@ public class vigenereCipher : MonoBehaviour {
     void FlashHelper(string text, Color color) {
         ledText.color = color;
         ledText.text = text;
+    }
+
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} submit|solve|s ABC123";
+#pragma warning restore 414
+
+    public KMSelectable[] ProcessTwitchCommand(string command) {
+        command = command.ToLowerInvariant();
+
+        var submit = Regex.Match(command, @"^\s*(?:submit|solve|s)\s+([A-Za-z0-9]*)\s*$", RegexOptions.IgnoreCase);
+        if (submit.Success) {
+            string tpInput = submit.Groups[1].Value;
+            Debug.LogFormat("[Vigenère Cipher #{0}] Twitch Plays submitted {1}, Expected {2}.", moduleId, tpInput.ToUpperInvariant(), answer);
+            KMSelectable[] submitButtons = new KMSelectable[tpInput.Length + 1];
+            for (int i = 0; i < tpInput.Length; i++) {
+                foreach (KMSelectable kMSelectable in buttons) {
+                    if (kMSelectable.GetComponentInChildren<TextMesh>().text.Length == 1 && kMSelectable.GetComponentInChildren<TextMesh>().text.ToLowerInvariant()[0] == tpInput[i]) {
+                        submitButtons[i] = kMSelectable;
+                    }
+                }
+            }
+            foreach (KMSelectable kMSelectable2 in buttons)
+            {
+                if (kMSelectable2.GetComponentInChildren<TextMesh>().text == "Submit")
+                {
+                    submitButtons[submitButtons.Length-1] = kMSelectable2;
+                }
+            }
+            return submitButtons;
+        }
+        return null;
     }
 }

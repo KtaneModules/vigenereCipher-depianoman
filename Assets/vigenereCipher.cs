@@ -61,6 +61,7 @@ public class vigenereCipher : MonoBehaviour {
             textDisplay += alphabet[index];
             answer += alphabet[(index + alphabet.IndexOf(Bomb.GetSerialNumber()[i])) % 36];
         }
+        answer = answer.ToUpperInvariant();
         Debug.LogFormat("[Vigenère Cipher #{0}] Answer is {1}", moduleId, answer);
         ledText.text = textDisplay;
     }
@@ -132,14 +133,14 @@ public class vigenereCipher : MonoBehaviour {
     public KMSelectable[] ProcessTwitchCommand(string command) {
         command = command.ToLowerInvariant();
 
-        var submit = Regex.Match(command, @"^\s*(?:submit|solve|s)\s+([A-Za-z0-9]*)\s*$", RegexOptions.IgnoreCase);
+        var submit = Regex.Match(command, @"^\s*(?:submit|s)\s+([A-Za-z0-9]*)\s*$", RegexOptions.IgnoreCase);
         if (submit.Success) {
-            string tpInput = submit.Groups[1].Value;
-            Debug.LogFormat("[Vigenère Cipher #{0}] Twitch Plays submitted {1}, Expected {2}.", moduleId, tpInput.ToUpperInvariant(), answer);
+            string tpInput = submit.Groups[1].Value.ToUpperInvariant();
+            Debug.LogFormat("[Vigenère Cipher #{0}] Twitch Plays submitted {1}, Expected {2}.", moduleId, tpInput, answer);
             KMSelectable[] submitButtons = new KMSelectable[tpInput.Length + 1];
             for (int i = 0; i < tpInput.Length; i++) {
                 foreach (KMSelectable kMSelectable in buttons) {
-                    if (kMSelectable.GetComponentInChildren<TextMesh>().text.Length == 1 && kMSelectable.GetComponentInChildren<TextMesh>().text.ToLowerInvariant()[0] == tpInput[i]) {
+                    if (kMSelectable.GetComponentInChildren<TextMesh>().text.Length == 1 && kMSelectable.GetComponentInChildren<TextMesh>().text[0] == tpInput[i]) {
                         submitButtons[i] = kMSelectable;
                     }
                 }
@@ -154,5 +155,25 @@ public class vigenereCipher : MonoBehaviour {
             return submitButtons;
         }
         return null;
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        Debug.LogFormat("[Vigenère Cipher #{0}] Twitch Plays force solved.", moduleId);
+        for (int i = 0; i < answer.Length; i++) {
+            foreach (KMSelectable kMSelectable in buttons) {
+                if (kMSelectable.GetComponentInChildren<TextMesh>().text.Length == 1 && kMSelectable.GetComponentInChildren<TextMesh>().text[0] == answer[i]) {
+                    kMSelectable.OnInteract();
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        foreach (KMSelectable kMSelectable2 in buttons)
+        {
+            if (kMSelectable2.GetComponentInChildren<TextMesh>().text == "Submit")
+            {
+                kMSelectable2.OnInteract();
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   id: vigenereCipher
   title: "Vigen\xE8re Cipher"
   author: DevExit
-  description: "Vigen\xE8re Cipher 1.10\nJulius Caesar's little brother...by about
+  description: "Vigen\xE8re Cipher 1.11\n\nJulius Caesar's little brother...by about
     1600 years...\n\nModule ID: vigenereCipher\n\nCreated by: DevExit\n\nManual available
     here:\n[url=https://depianoman.github.io/vigenereCipher/Manual/Vigenere%20Cipher.html]HTML[/url]\n[url=https://depianoman.github.io/vigenereCipher/Manual/pdfs/Modules/Vigen\xE8re%20Cipher.pdf]PDF[/url]"
   version: 1.9

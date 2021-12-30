@@ -127,7 +127,7 @@ public class vigenereCipher : MonoBehaviour {
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} submit|solve|s ABC123";
+    private readonly string TwitchHelpMessage = @"!{0} submit|s ABC123";
 #pragma warning restore 414
 
     public KMSelectable[] ProcessTwitchCommand(string command) {
